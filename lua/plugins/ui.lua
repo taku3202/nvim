@@ -1,0 +1,113 @@
+return {
+  -- colorscheme
+  {
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    priority = 1000,
+    init = function()
+      vim.cmd.colorscheme('catppuccin')
+    end,
+    opts = {
+      flavour = 'mocha',
+      no_italic = true,
+      highlight_overrides = {
+        all = function(colors)
+          return {
+            NormalFloat = { bg = colors.base },
+          }
+        end,
+      },
+    },
+  },
+
+  -- alpha
+  {
+    'goolord/alpha-nvim',
+    event = 'VimEnter',
+    config = function()
+      local alpha = require('alpha')
+      local dashboard = require('alpha.themes.dashboard')
+      local icons = require('plugins.config.icons').alpha_icons
+
+      dashboard.section.header.val = {
+        '                   -`                   ',
+        '                  .o+`                  ',
+        '                 `ooo/                  ',
+        '                `+oooo:                 ',
+        '               `+oooooo:                ',
+        '               -+oooooo+:               ',
+        '             `/:-:++oooo+:              ',
+        '            `/++++/+++++++:             ',
+        '           `/++++++++++++++:            ',
+        '          `/+++ooooooooooooo/`          ',
+        '         ./ooosssso++osssssso+`         ',
+        '        .oossssso-````/ossssss+`        ',
+        '       -osssssso.      :ssssssso.       ',
+        '      :osssssss/        osssso+++.      ',
+        '     /ossssssss/        +ssssooo/-      ',
+        '   `/ossssso+/:-        -:/+osssso+-   ',
+        '  `+sso+:-`                 `.-/+oso:   ',
+        ' `++:.                           `-/+/ ',
+        ' .`                                 `/ ',
+      }
+
+      dashboard.section.buttons.val = {
+        dashboard.button('n', icons.new_file .. ' New File', '<Cmd>ene <BAR> startinsert<CR>'),
+        dashboard.button('p', icons.search .. ' Search Projects', '<Cmd>Telescope projects<CR>'),
+        dashboard.button('e', icons.explorer .. ' NvimTree Explorer', '<Cmd>NvimTreeToggle<CR>'),
+        dashboard.button('l', icons.plugin_manager .. ' Lazy Manage', '<Cmd>Lazy<CR>'),
+        dashboard.button('s', icons.setting .. ' Setting', '<Cmd>e $MYVIMRC<CR>'),
+        dashboard.button('q', icons.quit .. ' Quit Neovim', '<Cmd>qa<CR>'),
+      }
+
+      local stats = require('lazy').stats()
+      dashboard.section.footer.val = icons.loaded .. ' Neovim loaded ' .. stats.count .. ' plugins'
+
+      alpha.setup(dashboard.opts)
+
+      vim.cmd([[autocmd FileType alpha setlocal nofoldenable]])
+    end,
+  },
+
+  -- statusline
+  {
+    'nvim-lualine/lualine.nvim',
+    event = 'VeryLazy',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = function()
+      local icons = require('plugins.config.icons').diagnostic_icons
+      return {
+        options = {
+          component_separators = { right = '|' },
+          section_separators = '',
+        },
+        sections = {
+          lualine_b = {
+            'branch',
+            'diff',
+            {
+              'diagnostics',
+              symbols = icons,
+            },
+          },
+          lualine_x = {
+            'encoding',
+            'fileformat',
+            'filetype',
+          },
+        },
+      }
+    end,
+  },
+
+  -- indent line
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    opts = {
+      indent = {
+        char = '▏',
+      },
+    },
+  },
+}
