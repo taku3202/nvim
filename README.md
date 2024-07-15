@@ -13,5 +13,4 @@
 
 ```
 git clone https://github.com/taku3202/nvim.git ~/.config/nvim
-
 ```
